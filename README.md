@@ -18,15 +18,17 @@ npm run build
 ## Release steps
 
 ``` bash
+#update version number
+> npm version $VERSION --message "[release] v$VERSION"
+
 # Build assets
-npm run build
+> npm run build
 
 # Commit to git repository
-git add -A
-git commit -m "[build] $VERSION"
+> git add -A
+> git commit -m "[build] v$VERSION"
 
-# update version numver
-
+# publish
+> git push
+> npm publish 
 ```
-
-For detailed explanation on how things work, consult the [docs for vue-loader](http://vuejs.github.io/vue-loader).
