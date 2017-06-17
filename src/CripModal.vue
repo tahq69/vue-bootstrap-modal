@@ -38,9 +38,6 @@
       this.$emit('mounted', this.id)
       this.jqEl = $(this.$el)
 
-      // show modal on mount
-      this.jqEl.modal('show')
-
       this.jqEl.on('hidden.bs.modal', e => {
         this.$emit('hidden', e)
       })
@@ -48,6 +45,10 @@
       this.jqEl.on('shown.bs.modal', () => {
         this.$emit('shown')
       })
+
+      if (!this.close) {
+        this.openModal()
+      }
     },
 
     computed: {
@@ -75,21 +76,27 @@
        */
       closeModal () {
         this.jqEl.find('button.close').trigger('click')
+      },
+
+      /**
+       * Show Modal
+       */
+      openModal () {
+        // show modal on mount
+        this.jqEl.modal('show')
       }
     },
 
     destroyed () {
       this.$emit('destroyed', this.id)
-      // Ensure that there is no backdrops when leaving this component.
+      // Ensure that there is no backdrops when leaving this component without
+      // close action (usually may happen in SPA).
       $('.modal-backdrop').remove()
     },
 
     watch: {
       'close' (val) {
-        if (val) {
-          // If modal close property mutates to true, close this instance.
-          this.closeModal()
-        }
+        val ? this.closeModal() : this.openModal()
       }
     }
   }
