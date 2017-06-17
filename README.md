@@ -82,13 +82,13 @@ npm run build
 > git add -A
 > git commit -m "[build] v$VERSION"
 
-# Build assets
-> npm run build
-
 #update version number
 > npm version $VERSION --message "[release] v$VERSION"
 
+# Build assets
+> npm run build
+
 # publish
 > git push
-> npm publish 
+> npm publish
 ```
