@@ -15,4 +15,18 @@ npm run dev
 npm run build
 ```
 
+## Release steps
+
+``` bash
+# Build assets
+npm run build
+
+# Commit to git repository
+git add -A
+git commit -m "[build] $VERSION"
+
+# update version numver
+
+```
+
 For detailed explanation on how things work, consult the [docs for vue-loader](http://vuejs.github.io/vue-loader).

@@ -1,5 +1,6 @@
-var path = require('path')
-var webpack = require('webpack')
+const path = require('path')
+const webpack = require('webpack')
+const version = process.env.VERSION || require('./package.json').version
 
 module.exports = {
   entry: {
@@ -9,7 +10,8 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, './dist'),
     publicPath: '/dist/',
-    filename: '[name].js'
+    filename: '[name].js',
+    libraryTarget: 'umd'
   },
   module: {
     rules: [
@@ -47,26 +49,37 @@ module.exports = {
   performance: {
     hints: false
   },
-  devtool: '#eval-source-map'
+  devtool: '#eval-source-map',
+  plugins: [
+    new webpack.LoaderOptionsPlugin({
+      minimize: true,
+      progress: true,
+      hide_modules: true
+    }),
+    new webpack.DefinePlugin({
+      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development')
+    }),
+    new webpack.BannerPlugin({
+      banner: `/*!
+* Crip vue bootstrap modal v${version}
+* Forged by Igors Krasjukovs <tahq69@gmail.com>
+* Released under the MIT License.
+*/   `,
+      raw: true,
+      entryOnly: true
+    }),
+  ]
 }
 
 if (process.env.NODE_ENV === 'production') {
   module.exports.devtool = '#source-map'
   // http://vue-loader.vuejs.org/en/workflow/production.html
   module.exports.plugins = (module.exports.plugins || []).concat([
-    new webpack.DefinePlugin({
-      'process.env': {
-        NODE_ENV: '"production"'
-      }
-    }),
     new webpack.optimize.UglifyJsPlugin({
       sourceMap: true,
       compress: {
         warnings: false
       }
-    }),
-    new webpack.LoaderOptionsPlugin({
-      minimize: true
     })
   ])
 }
